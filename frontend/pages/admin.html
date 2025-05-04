@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrador | OOMAPAS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <style>
+    :root {
+      --oomapas-blue: #005baa;
+      --oomapas-dark-blue: #003d6b;
+      --oomapas-light-blue: #e6f0fa;
+    }
+
+    body {
+      background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+        url('images/encuesta.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    .navbar-oomapas {
+      background: linear-gradient(135deg, var(--oomapas-blue), var(--oomapas-dark-blue));
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-container {
+      background-color: rgba(255, 255, 255, 0.96);
+      border-radius: 15px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      border-top: 4px solid var(--oomapas-blue);
+    }
+
+    .page-title {
+      color: var(--oomapas-blue);
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--oomapas-blue), #00a6e8);
+      border-radius: 3px;
+    }
+
+    .btn-oomapas {
+      background-color: var(--oomapas-blue);
+      border: none;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .btn-oomapas:hover {
+      background-color: var(--oomapas-dark-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 91, 170, 0.2);
+    }
+
+    .table-oomapas {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .table-oomapas thead {
+      background: linear-gradient(135deg, var(--oomapas-blue), var(--oomapas-dark-blue));
+      color: white;
+    }
+
+    .table-oomapas th {
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .table-oomapas tbody tr {
+      transition: all 0.2s;
+    }
+
+    .table-oomapas tbody tr:hover {
+      background-color: rgba(0, 91, 170, 0.05);
+    }
+
+    .action-btn {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 50px;
+    }
+
+    .modal-oomapas .modal-header {
+      background: linear-gradient(135deg, var(--oomapas-blue), var(--oomapas-dark-blue));
+      color: white;
+    }
+
+    .logout-modal .modal-header {
+      background-color: var(--oomapas-blue);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 1.5rem;
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-oomapas shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+        <img src="images/logo.png" alt="Logo OOMAPAS" class="d-inline-block align-top me-2" style="height: 40px;">
+        <span class="d-none d-sm-inline">Panel Administrador</span>
+      </a>
+      <button class="btn btn-outline-light btn-sm fw-semibold d-flex align-items-center" data-bs-toggle="modal"
+        data-bs-target="#logoutModal">
+        <i class="bi bi-box-arrow-right me-1"></i>
+        <span class="d-none d-sm-inline">Cerrar Sesión</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container main-container">
+    <div class="text-center mb-4">
+      <h2 class="page-title">
+        <i class="bi bi-list-check me-2"></i>Administrar Encuestas
+      </h2>
+    </div>
+    <div class="d-flex justify-content-end mb-4">
+      <button class="btn btn-oomapas btn-lg rounded-pill shadow-sm d-flex align-items-center" data-bs-toggle="modal"
+        data-bs-target="#modalNuevaEncuesta">
+        <i class="bi bi-plus-circle-fill me-2"></i>Agregar Encuesta
+      </button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-oomapas table-hover shadow-sm">
+        <thead>
+          <tr class="text-center">
+            <th>#</th>
+            <th class="text-start">Encuesta</th>
+            <th>Fecha de Creación</th>
+            <th>Fecha Límite</th>
+            <th class="text-start">Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaEncuestasAdmin">
+          <!-- Aquí se cargan dinámicamente las encuestas desde admin.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal fade" id="modalNuevaEncuesta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content rounded-4 shadow-lg border-0">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-clipboard-plus me-2"></i> Crear Nueva Encuesta
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <form id="formNuevaEncuesta">
+            <!-- Nombre -->
+            <div class="mb-3">
+              <label for="NombreEncuesta" class="form-label fw-semibold">Nombre de la Encuesta</label>
+              <input type="text" class="form-control form-control-lg rounded-3" id="NombreEncuesta"
+                placeholder="Ingrese el nombre" required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="mb-3">
+              <label for="DescripcionEncuesta" class="form-label fw-semibold">Descripción</label>
+              <textarea class="form-control rounded-3" id="DescripcionEncuesta" rows="3"
+                placeholder="Agregue una descripción" required></textarea>
+            </div>
+
+            <!-- Fecha límite -->
+            <div class="mb-4">
+              <label for="FechaLimite" class="form-label fw-semibold">Fecha Límite</label>
+              <input type="date" class="form-control form-control-lg rounded-3" id="FechaLimite" required>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Preguntas -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Preguntas de la Encuesta</label>
+              <div id="listaPreguntas" class="mb-3"></div>
+              <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" id="btnAgregarPregunta">
+                <i class="bi bi-plus-circle me-1"></i> Agregar Pregunta
+              </button>
+            </div>
+
+            <!-- Template pregunta -->
+            <template id="templatePregunta">
+              <div class="card mb-3 pregunta-item border border-1 rounded-3 shadow-sm">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="card-title mb-0">Pregunta #<span class="pregunta-numero"></span></h6>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarPregunta(this)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Texto de la pregunta</label>
+                    <input type="text" class="form-control pregunta-texto rounded-2" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Tipo de pregunta</label>
+                    <select class="form-select pregunta-tipo rounded-2" required>
+                      <option value="Abierta">Abierta (Texto libre)</option>
+                      <option value="OpcionUnica">Opción única (Sí/No)</option>
+                      <option value="Dependiente">Dependiente (Condicional)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-check mb-3">
+                    <input class="form-check-input pregunta-obligatoria" type="checkbox" checked>
+                    <label class="form-check-label">Pregunta obligatoria</label>
+                  </div>
+
+                  <div class="dependiente-config" style="display: none;">
+                    <div class="mb-3">
+                      <label class="form-label">Depende de pregunta</label>
+                      <select class="form-select pregunta-padre rounded-2"></select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Mostrar cuando la respuesta sea</label>
+                      <select class="form-select pregunta-respuesta rounded-2">
+                        <option value="SI">Sí</option>
+                        <option value="NO">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Botón crear -->
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                <i class="bi bi-check-circle-fill me-2"></i>Crear Encuesta
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Encuesta -->
+  <div class="modal fade modal-oomapas" id="modalEditarEncuesta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-pencil-square me-2"></i>Editar Encuesta
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarEncuesta">
+            <input type="hidden" id="editEncuestaId">
+            <div class="mb-3">
+              <label for="editNombreEncuesta" class="form-label fw-semibold">Nombre de la Encuesta</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-pencil-square"></i></span>
+                <input type="text" class="form-control form-control-lg" id="editNombreEncuesta"
+                  placeholder="Ingrese el nombre" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editDescripcionEncuesta" class="form-label fw-semibold">Descripción</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-card-text"></i></span>
+                <textarea class="form-control" id="editDescripcionEncuesta" rows="3"
+                  placeholder="Agregue una descripción" required></textarea>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editFechaLimite" class="form-label fw-semibold">Fecha Límite</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-calendar-event"></i></span>
+                <input type="date" class="form-control form-control-lg" id="editFechaLimite" required>
+              </div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-oomapas btn-lg rounded-pill">
+                <i class="bi bi-check-circle-fill me-2"></i>Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Estadísticas -->
+  <div class="modal fade" id="modalEstadisticas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-bar-chart-line-fill me-2"></i>Estadísticas de la Encuesta
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="contenidoEstadisticas" class="px-2 py-2">
+            <!-- Se cargan dinámicamente con JS -->
+          </div>
+          <div class="d-grid mt-3 px-2">
+            <button class="btn btn-danger rounded-pill" onclick="exportarEstadisticasPDF()">
+              <i class="bi bi-file-earmark-pdf-fill me-2"></i> Exportar a PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación de Cierre de Sesión -->
+  <div class="modal fade logout-modal" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bi bi-question-circle text-warning" style="font-size: 3rem;"></i>
+          <h5 class="mt-3">¿Está seguro que desea cerrar sesión?</h5>
+          <p class="text-muted">Será redirigido a la página de inicio de sesión</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" onclick="cerrarSesion()">
+            <i class="bi bi-box-arrow-right me-1"></i>Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <script src="/js/admin.js"></script>
+</body>
+
+</html>
