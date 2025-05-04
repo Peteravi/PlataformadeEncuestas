@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encuestas Disponibles | OOMAPAS</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --oomapas-blue: #005baa;
+      --oomapas-light-blue: #e6f0fa;
+    }
+
+    body {
+      background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+        url('images/encuesta.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    .navbar-oomapas {
+      background: linear-gradient(135deg, #005baa, #003d6b);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border-top: 4px solid var(--oomapas-blue);
+    }
+
+    .table-encuestas {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table-encuestas thead {
+      background: linear-gradient(135deg, var(--oomapas-blue), #003d6b);
+      color: white;
+    }
+
+    .btn-oomapas {
+      background-color: var(--oomapas-blue);
+      border: none;
+      transition: all 0.3s;
+    }
+
+    .btn-oomapas:hover {
+      background-color: #004a8c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 91, 170, 0.2);
+    }
+
+    .logout-modal .modal-header {
+      background-color: var(--oomapas-blue);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Superior -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-oomapas shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+        <i class="bi bi-clipboard2-check me-2"></i>Portal Empleado
+      </a>
+      <button class="btn btn-outline-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#logoutModal">
+        <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <!-- Contenido Principal -->
+  <div class="container main-container py-4 px-4">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+      <h2 class="text-primary fw-bold">
+        <i class="bi bi-ui-checks-grid me-2"></i>Encuestas Disponibles
+      </h2>
+      <p class="text-muted">Seleccione una encuesta para comenzar a responder</p>
+    </div>
+
+    <!-- Tabla de Encuestas -->
+    <div class="table-responsive">
+      <table class="table table-encuestas table-hover align-middle">
+        <thead class="text-center">
+          <tr>
+            <th scope="col"><i class="bi bi-card-text me-2"></i>Encuesta</th>
+            <th scope="col"><i class="bi bi-journal-text me-2"></i>Descripción</th>
+            <th scope="col"><i class="bi bi-calendar-event me-2"></i>Fecha Límite</th>
+            <th scope="col"><i class="bi bi-gear me-2"></i>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaEncuestasEmpleado" class="text-center">
+          <!-- Ejemplo de filas -->
+          <tr>
+            <td class="fw-semibold">Satisfacción Laboral</td>
+            <td>Encuesta sobre el ambiente laboral en la organización</td>
+            <td>15/12/2023</td>
+            <td>
+              <button class="btn btn-oomapas btn-sm">
+                <i class="bi bi-pencil-square me-1"></i>Contestar
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="fw-semibold">Evaluación de Capacitación</td>
+            <td>Encuesta sobre cursos recibidos en el último trimestre</td>
+            <td>30/11/2023</td>
+            <td>
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye me-1"></i>Ver
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación de Cierre de Sesión -->
+  <div class="modal fade logout-modal" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bi bi-question-circle text-warning" style="font-size: 3rem;"></i>
+          <h5 class="mt-3">¿Está seguro que desea cerrar sesión?</h5>
+          <p class="text-muted">Será redirigido a la página de inicio de sesión</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" onclick="cerrarSesion()">
+            <i class="bi bi-box-arrow-right me-1"></i>Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/empleado.js"></script>
+
+</body>
+
+</html>
